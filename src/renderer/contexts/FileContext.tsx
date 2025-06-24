@@ -84,7 +84,7 @@ int main() {
       if (!result.canceled && result.filePaths.length > 0) {
         const filePath = result.filePaths[0];
         const fileName = filePath.split(/[\\/]/).pop() || 'untitled.cpp';
-        
+
         // Check if file is already open
         const existingTab = tabs.find(tab => tab.path === filePath);
         if (existingTab) {
@@ -92,24 +92,18 @@ int main() {
           return;
         }
 
-        // Read file content (in a real app, this would be done in the main process)
-        const content = await new Promise<string>((resolve, reject) => {
-          // This is a placeholder - in reality, file reading should be done via IPC
-          resolve(`// File: ${fileName}
-#include <iostream>
-using namespace std;
-
-int main() {
-    
-    return 0;
-}`);
-        });
+        // Read file content from disk
+        const fileResult = await window.electronAPI.readFile(filePath);
+        if (!fileResult.success) {
+          console.error('Failed to read file:', fileResult.error);
+          return;
+        }
 
         const newTab: FileTab = {
           id: `tab-${Date.now()}`,
           name: fileName,
           path: filePath,
-          content,
+          content: fileResult.content || '',
           isDirty: false
         };
 
@@ -122,15 +116,23 @@ int main() {
   }, [tabs]);
 
   const saveFile = useCallback(async () => {
-    if (!activeTab) return;
+    if (!activeTab || !window.electronAPI) return;
 
     if (activeTab.path) {
       // Save existing file
-      // In a real app, this would be done via IPC to the main process
-      console.log('Saving file:', activeTab.path);
-      setTabs(prev => prev.map(tab => 
-        tab.id === activeTab.id ? { ...tab, isDirty: false } : tab
-      ));
+      try {
+        const result = await window.electronAPI.writeFile(activeTab.path, activeTab.content);
+        if (result.success) {
+          setTabs(prev => prev.map(tab =>
+            tab.id === activeTab.id ? { ...tab, isDirty: false } : tab
+          ));
+          console.log('File saved successfully:', activeTab.path);
+        } else {
+          console.error('Failed to save file:', result.error);
+        }
+      } catch (error) {
+        console.error('Failed to save file:', error);
+      }
     } else {
       // Save as new file
       await saveAsFile();
@@ -146,12 +148,19 @@ int main() {
       const result = await window.electronAPI.saveFileDialog();
       if (!result.canceled && result.filePath) {
         const fileName = result.filePath.split(/[\\/]/).pop() || 'untitled.cpp';
-        
-        setTabs(prev => prev.map(tab => 
-          tab.id === activeTab.id 
-            ? { ...tab, name: fileName, path: result.filePath, isDirty: false }
-            : tab
-        ));
+
+        // Write file to disk
+        const writeResult = await window.electronAPI.writeFile(result.filePath, activeTab.content);
+        if (writeResult.success) {
+          setTabs(prev => prev.map(tab =>
+            tab.id === activeTab.id
+              ? { ...tab, name: fileName, path: result.filePath, isDirty: false }
+              : tab
+          ));
+          console.log('File saved as:', result.filePath);
+        } else {
+          console.error('Failed to save file:', writeResult.error);
+        }
       }
     } catch (error) {
       console.error('Failed to save file:', error);

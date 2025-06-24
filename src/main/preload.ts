@@ -6,6 +6,8 @@ contextBridge.exposeInMainWorld('electronAPI', {
   // File operations
   openFileDialog: () => ipcRenderer.invoke('open-file-dialog'),
   saveFileDialog: () => ipcRenderer.invoke('save-file-dialog'),
+  readFile: (filePath: string) => ipcRenderer.invoke('read-file', filePath),
+  writeFile: (filePath: string, content: string) => ipcRenderer.invoke('write-file', filePath, content),
   
   // Compiler operations
   compileAndRun: (code: string, input?: string) => 

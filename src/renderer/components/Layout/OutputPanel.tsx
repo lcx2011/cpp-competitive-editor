@@ -5,10 +5,17 @@ import './OutputPanel.css';
 export const OutputPanel: React.FC = () => {
   const { compileResult, isCompiling, compileAndRun, compileOnly, clearOutput } = useEditor();
   const [input, setInput] = useState('');
-  const [activeTab, setActiveTab] = useState<'output' | 'input'>('output');
+  const [activeTab, setActiveTab] = useState<'output' | 'input' | 'testcases'>('output');
+  const [testCases, setTestCases] = useState([
+    { id: 1, name: '测试用例 1', input: '', expectedOutput: '', active: true }
+  ]);
+  const [activeTestCase, setActiveTestCase] = useState(1);
 
   const handleRun = () => {
-    compileAndRun(input);
+    const currentInput = activeTab === 'testcases'
+      ? testCases.find(tc => tc.id === activeTestCase)?.input || ''
+      : input;
+    compileAndRun(currentInput);
   };
 
   const handleCompile = () => {
@@ -20,6 +27,35 @@ export const OutputPanel: React.FC = () => {
     if (activeTab === 'input') {
       setInput('');
     }
+  };
+
+  const addTestCase = () => {
+    const newId = Math.max(...testCases.map(tc => tc.id)) + 1;
+    const newTestCase = {
+      id: newId,
+      name: `测试用例 ${newId}`,
+      input: '',
+      expectedOutput: '',
+      active: true
+    };
+    setTestCases([...testCases, newTestCase]);
+    setActiveTestCase(newId);
+  };
+
+  const removeTestCase = (id: number) => {
+    if (testCases.length > 1) {
+      const newTestCases = testCases.filter(tc => tc.id !== id);
+      setTestCases(newTestCases);
+      if (activeTestCase === id) {
+        setActiveTestCase(newTestCases[0].id);
+      }
+    }
+  };
+
+  const updateTestCase = (id: number, field: 'input' | 'expectedOutput' | 'name', value: string) => {
+    setTestCases(testCases.map(tc =>
+      tc.id === id ? { ...tc, [field]: value } : tc
+    ));
   };
 
   return (
@@ -37,6 +73,12 @@ export const OutputPanel: React.FC = () => {
             onClick={() => setActiveTab('input')}
           >
             输入
+          </button>
+          <button
+            className={`output-tab ${activeTab === 'testcases' ? 'active' : ''}`}
+            onClick={() => setActiveTab('testcases')}
+          >
+            测试用例
           </button>
         </div>
         
@@ -104,7 +146,7 @@ export const OutputPanel: React.FC = () => {
               </div>
             )}
           </div>
-        ) : (
+        ) : activeTab === 'input' ? (
           <div className="input-area">
             <div className="input-header">
               <label className="input-label">程序输入:</label>
@@ -117,6 +159,66 @@ export const OutputPanel: React.FC = () => {
               placeholder="在此输入测试数据..."
               spellCheck={false}
             />
+          </div>
+        ) : (
+          <div className="testcases-area">
+            <div className="testcases-header">
+              <div className="testcases-tabs">
+                {testCases.map(testCase => (
+                  <div
+                    key={testCase.id}
+                    className={`testcase-tab ${activeTestCase === testCase.id ? 'active' : ''}`}
+                    onClick={() => setActiveTestCase(testCase.id)}
+                  >
+                    <input
+                      className="testcase-name-input"
+                      value={testCase.name}
+                      onChange={(e) => updateTestCase(testCase.id, 'name', e.target.value)}
+                      onClick={(e) => e.stopPropagation()}
+                    />
+                    {testCases.length > 1 && (
+                      <button
+                        className="testcase-remove"
+                        onClick={(e) => {
+                          e.stopPropagation();
+                          removeTestCase(testCase.id);
+                        }}
+                      >
+                        ×
+                      </button>
+                    )}
+                  </div>
+                ))}
+                <button className="testcase-add" onClick={addTestCase}>+</button>
+              </div>
+            </div>
+
+            <div className="testcase-content">
+              {testCases.filter(tc => tc.id === activeTestCase).map(testCase => (
+                <div key={testCase.id} className="testcase-editor">
+                  <div className="testcase-section">
+                    <label className="testcase-label">输入数据:</label>
+                    <textarea
+                      className="testcase-textarea"
+                      value={testCase.input}
+                      onChange={(e) => updateTestCase(testCase.id, 'input', e.target.value)}
+                      placeholder="输入测试数据..."
+                      spellCheck={false}
+                    />
+                  </div>
+                  <div className="testcase-section">
+                    <label className="testcase-label">期望输出:</label>
+                    <textarea
+                      className="testcase-textarea"
+                      value={testCase.expectedOutput}
+                      onChange={(e) => updateTestCase(testCase.id, 'expectedOutput', e.target.value)}
+                      placeholder="输入期望的输出结果..."
+                      spellCheck={false}
+                    />
+                  </div>
+                </div>
+              ))}
+            </div>
           </div>
         )}
       </div>

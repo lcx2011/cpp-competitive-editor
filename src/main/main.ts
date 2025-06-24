@@ -1,5 +1,6 @@
 import { app, BrowserWindow, Menu, ipcMain, dialog } from 'electron';
 import * as path from 'path';
+import * as fs from 'fs';
 import { createMenu } from './menu';
 import { CompilerService } from './compiler';
 
@@ -90,6 +91,25 @@ class Application {
         ]
       });
       return result;
+    });
+
+    // File operations
+    ipcMain.handle('read-file', async (event, filePath: string) => {
+      try {
+        const content = fs.readFileSync(filePath, 'utf-8');
+        return { success: true, content };
+      } catch (error) {
+        return { success: false, error: error instanceof Error ? error.message : 'Unknown error' };
+      }
+    });
+
+    ipcMain.handle('write-file', async (event, filePath: string, content: string) => {
+      try {
+        fs.writeFileSync(filePath, content, 'utf-8');
+        return { success: true };
+      } catch (error) {
+        return { success: false, error: error instanceof Error ? error.message : 'Unknown error' };
+      }
     });
 
     // Compiler operations

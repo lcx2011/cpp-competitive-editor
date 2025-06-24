@@ -1,4 +1,5 @@
 import React, { useRef, useEffect, useState } from 'react';
+import { useSettings } from '../../contexts/SettingsContext';
 
 interface SimpleCodeEditorProps {
   value: string;
@@ -6,6 +7,7 @@ interface SimpleCodeEditorProps {
 }
 
 const SimpleCodeEditor: React.FC<SimpleCodeEditorProps> = ({ value, onChange }) => {
+  const { settings } = useSettings();
   const textareaRef = useRef<HTMLTextAreaElement>(null);
   const [lineNumbers, setLineNumbers] = useState<string[]>([]);
 
@@ -23,13 +25,14 @@ const SimpleCodeEditor: React.FC<SimpleCodeEditorProps> = ({ value, onChange }) 
       const textarea = e.currentTarget;
       const start = textarea.selectionStart;
       const end = textarea.selectionEnd;
-      
-      const newValue = value.substring(0, start) + '    ' + value.substring(end);
+
+      const tabString = ' '.repeat(settings.tabSize);
+      const newValue = value.substring(0, start) + tabString + value.substring(end);
       onChange(newValue);
-      
+
       // 设置光标位置
       setTimeout(() => {
-        textarea.selectionStart = textarea.selectionEnd = start + 4;
+        textarea.selectionStart = textarea.selectionEnd = start + settings.tabSize;
       }, 0);
     }
   };
@@ -58,12 +61,12 @@ const SimpleCodeEditor: React.FC<SimpleCodeEditorProps> = ({ value, onChange }) 
   };
 
   return (
-    <div style={{ 
-      display: 'flex', 
-      height: '100%', 
-      background: '#1e1e1e',
-      fontFamily: 'Consolas, "Courier New", monospace',
-      fontSize: '14px'
+    <div style={{
+      display: 'flex',
+      height: '100%',
+      background: settings.theme === 'dark' ? '#1e1e1e' : '#ffffff',
+      fontFamily: settings.fontFamily,
+      fontSize: `${settings.fontSize}px`
     }}>
       {/* 行号区域 */}
       <div style={{

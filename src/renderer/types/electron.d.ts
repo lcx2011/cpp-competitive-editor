@@ -7,6 +7,15 @@ export interface ElectronAPI {
     canceled: boolean;
     filePath?: string;
   }>;
+  readFile: (filePath: string) => Promise<{
+    success: boolean;
+    content?: string;
+    error?: string;
+  }>;
+  writeFile: (filePath: string, content: string) => Promise<{
+    success: boolean;
+    error?: string;
+  }>;
   compileAndRun: (code: string, input?: string) => Promise<{
     success: boolean;
     output: string;

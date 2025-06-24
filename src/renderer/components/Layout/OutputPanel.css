@@ -170,3 +170,142 @@
 .input-textarea::placeholder {
   color: #6a6a6a;
 }
+
+/* 测试用例样式 */
+.testcases-area {
+  flex: 1;
+  display: flex;
+  flex-direction: column;
+  padding: 12px;
+}
+
+.testcases-header {
+  margin-bottom: 12px;
+}
+
+.testcases-tabs {
+  display: flex;
+  align-items: center;
+  gap: 4px;
+  overflow-x: auto;
+  padding-bottom: 8px;
+}
+
+.testcase-tab {
+  display: flex;
+  align-items: center;
+  background: #37373d;
+  border: 1px solid #5a5a5a;
+  border-radius: 4px;
+  padding: 4px 8px;
+  cursor: pointer;
+  transition: background-color 0.2s;
+  min-width: 120px;
+}
+
+.testcase-tab:hover {
+  background: #404040;
+}
+
+.testcase-tab.active {
+  background: #007acc;
+  border-color: #007acc;
+}
+
+.testcase-name-input {
+  background: none;
+  border: none;
+  color: #cccccc;
+  font-size: 12px;
+  outline: none;
+  flex: 1;
+  min-width: 0;
+}
+
+.testcase-tab.active .testcase-name-input {
+  color: white;
+}
+
+.testcase-remove {
+  background: none;
+  border: none;
+  color: #cccccc;
+  font-size: 14px;
+  width: 16px;
+  height: 16px;
+  cursor: pointer;
+  border-radius: 2px;
+  margin-left: 4px;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+}
+
+.testcase-remove:hover {
+  background: #e81123;
+  color: white;
+}
+
+.testcase-add {
+  background: #16825d;
+  border: none;
+  color: white;
+  font-size: 14px;
+  width: 24px;
+  height: 24px;
+  cursor: pointer;
+  border-radius: 4px;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+}
+
+.testcase-add:hover {
+  background: #1a9268;
+}
+
+.testcase-content {
+  flex: 1;
+  overflow: hidden;
+}
+
+.testcase-editor {
+  display: flex;
+  gap: 12px;
+  height: 100%;
+}
+
+.testcase-section {
+  flex: 1;
+  display: flex;
+  flex-direction: column;
+}
+
+.testcase-label {
+  font-size: 12px;
+  font-weight: 500;
+  color: #4fc1ff;
+  margin-bottom: 4px;
+}
+
+.testcase-textarea {
+  flex: 1;
+  background-color: #2d2d30;
+  border: 1px solid #3e3e42;
+  border-radius: 3px;
+  padding: 8px;
+  color: #cccccc;
+  font-family: 'Consolas', 'Courier New', monospace;
+  font-size: 12px;
+  resize: none;
+  outline: none;
+  line-height: 1.4;
+}
+
+.testcase-textarea:focus {
+  border-color: #007acc;
+}
+
+.testcase-textarea::placeholder {
+  color: #6a6a6a;
+}
