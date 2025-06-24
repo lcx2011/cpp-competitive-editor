@@ -1,0 +1,49 @@
+.layout {
+  display: flex;
+  flex-direction: column;
+  height: 100vh;
+  background-color: #1e1e1e;
+  color: #cccccc;
+}
+
+.layout-header {
+  flex-shrink: 0;
+  background-color: #2d2d30;
+  border-bottom: 1px solid #3e3e42;
+}
+
+.layout-content {
+  flex: 1;
+  overflow: hidden;
+}
+
+.layout-footer {
+  flex-shrink: 0;
+  background-color: #007acc;
+  color: white;
+  height: 22px;
+}
+
+/* Allotment customization */
+.allotment > .allotment-pane {
+  background-color: #1e1e1e;
+}
+
+.allotment-separator {
+  background-color: #3e3e42 !important;
+  border: none !important;
+}
+
+.allotment-separator:hover {
+  background-color: #007acc !important;
+}
+
+.allotment-separator.allotment-separator-vertical {
+  width: 4px !important;
+  cursor: row-resize !important;
+}
+
+.allotment-separator.allotment-separator-horizontal {
+  height: 4px !important;
+  cursor: col-resize !important;
+}

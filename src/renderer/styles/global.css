@@ -1,0 +1,168 @@
+/* Global styles */
+* {
+  box-sizing: border-box;
+}
+
+body {
+  margin: 0;
+  padding: 0;
+  font-family: 'Segoe UI', 'Helvetica Neue', Arial, sans-serif;
+  font-size: 13px;
+  line-height: 1.4;
+  background-color: #1e1e1e;
+  color: #cccccc;
+  overflow: hidden;
+  user-select: none;
+}
+
+#root {
+  width: 100vw;
+  height: 100vh;
+  display: flex;
+  flex-direction: column;
+}
+
+/* Scrollbar styles */
+::-webkit-scrollbar {
+  width: 10px;
+  height: 10px;
+}
+
+::-webkit-scrollbar-track {
+  background: #2d2d30;
+}
+
+::-webkit-scrollbar-thumb {
+  background: #424242;
+  border-radius: 5px;
+}
+
+::-webkit-scrollbar-thumb:hover {
+  background: #4f4f4f;
+}
+
+/* Loading styles */
+.loading {
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  height: 100vh;
+  font-size: 14px;
+  color: #cccccc;
+}
+
+.spinner {
+  border: 3px solid #3c3c3c;
+  border-top: 3px solid #007acc;
+  border-radius: 50%;
+  width: 30px;
+  height: 30px;
+  animation: spin 1s linear infinite;
+  margin-right: 12px;
+}
+
+@keyframes spin {
+  0% { transform: rotate(0deg); }
+  100% { transform: rotate(360deg); }
+}
+
+/* Button styles */
+.btn {
+  background: #0e639c;
+  border: 1px solid #0e639c;
+  color: white;
+  padding: 6px 14px;
+  border-radius: 2px;
+  cursor: pointer;
+  font-size: 13px;
+  outline: none;
+  transition: all 0.2s ease;
+  display: inline-flex;
+  align-items: center;
+  gap: 6px;
+  font-weight: 500;
+}
+
+.btn:hover {
+  background: #1177bb;
+}
+
+.btn:active {
+  background: #0d5a8a;
+}
+
+.btn:disabled {
+  background: #3c3c3c;
+  border-color: #3c3c3c;
+  color: #858585;
+  cursor: not-allowed;
+}
+
+.btn-secondary {
+  background: #5a5a5a;
+  border-color: #5a5a5a;
+}
+
+.btn-secondary:hover {
+  background: #6a6a6a;
+}
+
+/* Input styles */
+.input {
+  background: #3c3c3c;
+  border: 1px solid #5a5a5a;
+  color: #cccccc;
+  padding: 6px 8px;
+  border-radius: 2px;
+  font-size: 13px;
+  outline: none;
+}
+
+.input:focus {
+  border-color: #007acc;
+}
+
+/* Utility classes */
+.flex {
+  display: flex;
+}
+
+.flex-column {
+  flex-direction: column;
+}
+
+.flex-1 {
+  flex: 1;
+}
+
+.text-center {
+  text-align: center;
+}
+
+.text-small {
+  font-size: 11px;
+}
+
+.text-muted {
+  color: #858585;
+}
+
+.mb-1 {
+  margin-bottom: 8px;
+}
+
+.mb-2 {
+  margin-bottom: 16px;
+}
+
+.mr-1 {
+  margin-right: 8px;
+}
+
+.p-1 {
+  padding: 8px;
+}
+
+.p-2 {
+  padding: 16px;
+}

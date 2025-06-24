@@ -1,0 +1,85 @@
+.status-bar {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  height: 22px;
+  padding: 0 12px;
+  background-color: #007acc;
+  color: white;
+  font-size: 12px;
+  user-select: none;
+}
+
+.status-left {
+  display: flex;
+  align-items: center;
+  gap: 16px;
+}
+
+.status-right {
+  display: flex;
+  align-items: center;
+}
+
+.status-indicator {
+  display: flex;
+  align-items: center;
+  gap: 6px;
+}
+
+.status-text {
+  font-weight: 500;
+}
+
+.status-ready .status-text {
+  color: #ffffff;
+}
+
+.status-compiling .status-text {
+  color: #ffeb3b;
+}
+
+.status-success .status-text {
+  color: #4caf50;
+}
+
+.status-error .status-text {
+  color: #f44336;
+}
+
+.status-file {
+  display: flex;
+  align-items: center;
+  gap: 8px;
+}
+
+.status-filename {
+  color: #ffffff;
+  opacity: 0.9;
+}
+
+.status-modified {
+  color: #ffeb3b;
+  font-size: 11px;
+}
+
+.status-info {
+  display: flex;
+  align-items: center;
+  gap: 12px;
+}
+
+.status-info > span {
+  color: #ffffff;
+  opacity: 0.8;
+  font-size: 11px;
+  padding: 2px 6px;
+  border-radius: 2px;
+  background-color: rgba(255, 255, 255, 0.1);
+}
+
+.status-info > span:hover {
+  opacity: 1;
+  background-color: rgba(255, 255, 255, 0.2);
+  cursor: pointer;
+}
