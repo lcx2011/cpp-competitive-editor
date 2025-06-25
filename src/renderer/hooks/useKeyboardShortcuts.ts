@@ -12,6 +12,16 @@ export interface KeyboardShortcut {
 export const useKeyboardShortcuts = (shortcuts: KeyboardShortcut[]) => {
   useEffect(() => {
     const handleKeyDown = (event: KeyboardEvent) => {
+      // 防止在输入框中触发快捷键
+      const target = event.target as HTMLElement;
+      if (target.tagName === 'INPUT' || target.tagName === 'TEXTAREA' || target.contentEditable === 'true') {
+        // 只允许特定的快捷键在输入框中工作
+        const allowedInInput = ['F1', 'F5'];
+        if (!allowedInInput.includes(event.key)) {
+          return;
+        }
+      }
+
       for (const shortcut of shortcuts) {
         const keyMatch = event.key.toLowerCase() === shortcut.key.toLowerCase();
         const ctrlMatch = !!shortcut.ctrl === event.ctrlKey;
@@ -27,9 +37,9 @@ export const useKeyboardShortcuts = (shortcuts: KeyboardShortcut[]) => {
       }
     };
 
-    document.addEventListener('keydown', handleKeyDown);
+    document.addEventListener('keydown', handleKeyDown, { capture: true });
     return () => {
-      document.removeEventListener('keydown', handleKeyDown);
+      document.removeEventListener('keydown', handleKeyDown, { capture: true });
     };
   }, [shortcuts]);
 };

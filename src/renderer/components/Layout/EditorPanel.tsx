@@ -58,22 +58,6 @@ export const EditorPanel: React.FC = () => {
           >
             📋 模板
           </button>
-          <button
-            className="btn btn-run"
-            onClick={() => compileAndRun()}
-            disabled={isCompiling}
-            title="编译并运行 (F5)"
-          >
-            {isCompiling ? '运行中...' : '▶ 运行'}
-          </button>
-          <button
-            className="btn btn-compile"
-            onClick={compileOnly}
-            disabled={isCompiling}
-            title="仅编译 (Ctrl+F5)"
-          >
-            🔧 编译
-          </button>
         </div>
       </div>
       
