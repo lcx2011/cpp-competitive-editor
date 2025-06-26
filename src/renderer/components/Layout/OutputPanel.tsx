@@ -1,12 +1,12 @@
 import React, { useState } from 'react';
-import { useEditor } from '../../contexts/EditorContext';
+import { useEditor, TestCase } from '../../contexts/EditorContext';
 import './OutputPanel.css';
 
 export const OutputPanel: React.FC = () => {
   const { compileResult, isCompiling, compileAndRun, compileOnly, clearOutput } = useEditor();
   const [input, setInput] = useState('');
   const [activeTab, setActiveTab] = useState<'output' | 'input' | 'testcases'>('output');
-  const [testCases, setTestCases] = useState([
+  const [testCases, setTestCases] = useState<TestCase[]>([
     { id: 1, name: '测试用例 1', input: '', expectedOutput: '', active: true }
   ]);
   const [activeTestCase, setActiveTestCase] = useState(1);
@@ -15,7 +15,13 @@ export const OutputPanel: React.FC = () => {
     const currentInput = activeTab === 'testcases'
       ? testCases.find(tc => tc.id === activeTestCase)?.input || ''
       : input;
-    compileAndRun(currentInput);
+
+    // 如果有测试用例，总是传递所有测试用例进行批量测试
+    if (testCases.length > 0 && testCases.some(tc => tc.input.trim() || tc.expectedOutput.trim())) {
+      compileAndRun(currentInput, testCases);
+    } else {
+      compileAndRun(currentInput);
+    }
   };
 
   const handleCompile = () => {
